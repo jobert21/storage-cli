@@ -40,8 +40,10 @@ Create a `storage-config.json` file:
 
 ```json
 {
-  "storageType": "AZURE",
-  "connectionString": "DefaultEndpointsProtocol=...",
-  "containerName": "my-container"
+  "type" : "AZURE",
+  "config" : {
+  	"containerName": "container",
+    "connectionString" : ""
+  }
 }
 ```
