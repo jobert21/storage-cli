@@ -1,6 +1,6 @@
 # storage-cli
 
-CLI tool for uploading, deleting, and listing files in Azure Blob Storage.
+CLI tool for uploading, deleting, and listing files in Cloud Storage.
 
 ## Build
 
@@ -40,7 +40,7 @@ Create a `storage-config.json` file:
 
 ```json
 {
-  "storageType": "AZURE_BLOB",
+  "storageType": "AZURE",
   "connectionString": "DefaultEndpointsProtocol=...",
   "containerName": "my-container"
 }
