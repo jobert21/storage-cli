@@ -83,6 +83,9 @@ public class AzureStorage implements IStorage {
 			log.warn("Container name does not exist in the configuration.");
 			return;
 		}
+		if (StringUtils.isEmpty(name)) {
+			name = UUID.randomUUID().toString();
+		}
 		log.info("Container client -> {}.", containerName);
 		BlobContainerClient containerClient = getClient(containerName);
 
@@ -97,7 +100,8 @@ public class AzureStorage implements IStorage {
 	@Override
 	public void uploadFromPath(Path path, String name, boolean overwrite) throws IOException {
 		if (!Files.isDirectory(path)) {
-			upload(Files.newInputStream(path), name, overwrite);
+			upload(Files.newInputStream(path), StringUtils.isEmpty(name) ? path.getFileName().toString() : name,
+					overwrite);
 			return;
 		}
 		String containerName = getContainerNameOrDefault();
@@ -114,7 +118,7 @@ public class AzureStorage implements IStorage {
 				if (!Files.isDirectory(file)) {
 					Path newPath = Paths.get(name).resolve(file.getFileName().toString());
 					log.info("Blob client -> {}.", newPath);
-					
+
 					BlobClient blobClient = containerClient.getBlobClient(newPath.toString());
 					log.info("Uploading {}.", file);
 					blobClient.uploadFromFile(file.toString(), overwrite);

@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ja.tools.storage.IStorage;
 import ja.tools.storage.StorageType;
 import ja.tools.storage.impl.AzureStorage;
+import ja.tools.storage.impl.S3Storage;
 
 /**
  * @author jobert
@@ -59,6 +60,7 @@ public class StorageConfig {
 			storage = new AzureStorage(storageConfig);
 			break;
 		case AWS:
+			storage = new S3Storage(storageConfig);
 			break;
 		}
 		return storage;

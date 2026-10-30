@@ -38,8 +38,14 @@ public class StorageCli {
 	public static final String ITEM_NAME_ARG_SMALL = "n";
 	public static final String CONFIG_ARG = "config";
 	public static final String CONFIG_ARG_SMALL = "c";
+	public static final String HELP_ARG = "help";
+	public static final String HELP_ARG_SMALL = "h";
 
 	public static void main(String[] args) {
+		System.exit(run(args));
+	}
+
+	static int run(String[] args) {
 		Options options = new Options();
 		options.addOption(PATH_ARG_SMALL, PATH_ARG, true, "The path of the file to upload or download.");
 		options.addOption(ACTION_ARG_SMALL, ACTION_ARG, true, "The action to execute. Example: list, upload, delete");
@@ -47,6 +53,7 @@ public class StorageCli {
 				"The config file. It should be the same format as " + StorageConfig.STORAGE_CONFIG_FILENAME + ".");
 		options.addOption(ITEM_NAME_ARG_SMALL, ITEM_NAME_ARG, true,
 				"The name with path. Optional. Will use the filename from the file.");
+		options.addOption(HELP_ARG_SMALL, HELP_ARG, false, "Help");
 
 		HelpFormatter formatter = new HelpFormatter();
 		CommandLineParser cli = new DefaultParser();
@@ -57,6 +64,10 @@ public class StorageCli {
 		String nameAndPath = null;
 		try {
 			cmd = cli.parse(options, args, true);
+			if (cmd.hasOption(HELP_ARG_SMALL) || args.length == 0) {
+				printHelpGeneric(formatter, options);
+				return 0;
+			}
 			if (cmd.hasOption(ACTION_ARG_SMALL)) {
 				action = StorageAction.valueOf(cmd.getOptionValue(ACTION_ARG_SMALL).toUpperCase());
 			}
@@ -79,11 +90,11 @@ public class StorageCli {
 			}
 			ObjectMapper mapper = createMapper();
 			IStorage storage = StorageConfig.resolve(mapper, configPath);
-			
+
 			if (StringUtils.isEmpty(nameAndPath) && path != null) {
 				nameAndPath = path.getFileName().toString();
 			}
-			
+
 			switch (action) {
 			case LIST:
 				log.info("Executing action = {}.", action);
@@ -102,6 +113,7 @@ public class StorageCli {
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
+		return 0;
 	}
 
 	static ObjectMapper createMapper() {
@@ -113,7 +125,7 @@ public class StorageCli {
 	}
 
 	static void printHelpGeneric(HelpFormatter formatter, Options options) {
-		formatter.printHelp("java -jar storage-cli -p /path/to/file -a upload", options);
+		formatter.printHelp("java -jar storage-cli <args>", options);
 	}
 
 	static void printHelpUploadDelete(HelpFormatter formatter, Options options) {

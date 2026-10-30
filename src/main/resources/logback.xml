@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="30 seconds">
-
+<configuration>
+	<statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+	
     <property name="LOG_DIR" value="logs" />
     <property name="APP_NAME" value="storage-cli" />
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
@@ -35,9 +36,10 @@
     </appender>
 
     <!-- Third-party noise reduction -->
-    <logger name="io.netty" level="INFO" />
-    <logger name="reactor.netty" level="INFO" />
+    <logger name="io.netty" level="WARN" />
+    <logger name="reactor.netty" level="WARN" />
     <logger name="com.azure" level="INFO" />
+    <logger name="software.amazon" level="INFO" />
 
     <!-- Your app -->
     <logger name="ja.tools.storage" level="DEBUG" />
